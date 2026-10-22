@@ -27,6 +27,26 @@
       max-width:min(94vw,580px);
       transition:transform .25s ease-in-out;
     }
+    #panel[hidden]{display:none}
+    #panel{
+      box-sizing:border-box;
+      min-width:0;
+      width:min(580px, calc(100vw - 20px));
+      max-height:calc(100dvh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      overflow-y:auto;
+    }
+    #menuToggle{
+      position:fixed;
+      left:calc(12px + env(safe-area-inset-left));
+      bottom:calc(12px + env(safe-area-inset-bottom));
+      z-index:2147483200;
+      background:#334155;
+      color:#fff;
+      border-color:#334155;
+      box-shadow:0 6px 24px rgba(0,0,0,.18);
+      font-weight:700;
+    }
+    #menuToggle:focus-visible{outline:3px solid #0ea5e9;outline-offset:3px}
     #panel h1{margin:0 0 8px;font-size:15px;font-weight:700}
     .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0}
     .small{font-size:11px;color:#555}
@@ -142,9 +162,23 @@
     </div>
   </div>
 
+  <button id="menuToggle" type="button" aria-controls="panel" aria-expanded="true">メニューを非表示</button>
   <button id="fabStop">停止</button>
   <div id="recBadge"><div class="dot"></div>評価中</div>
   <div id="toast"></div>
+
+  <!-- 地図ライブラリの状態にかかわらずメニューを切り替え可能にする -->
+  <script>
+  (() => {
+    const panel = document.getElementById('panel');
+    const toggle = document.getElementById('menuToggle');
+    toggle.addEventListener('click', () => {
+      panel.hidden = !panel.hidden;
+      toggle.setAttribute('aria-expanded', String(!panel.hidden));
+      toggle.textContent = panel.hidden ? 'メニューを表示' : 'メニューを非表示';
+    });
+  })();
+  </script>
 
   <!-- ライブラリ -->
   <script src="leaflet.js"></script>
